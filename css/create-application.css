@@ -1,0 +1,393 @@
+/* Цветовая палитра в стиле красного вина */
+:root {
+    --wine-primary: #722F37;
+    --wine-dark: #5A2329;
+    --wine-light: #8C4A52;
+    --cream: #F8F4F0;
+    --gold: #D4AF37;
+    --text-dark: #2C1810;
+    --success: #38A169;
+    --warning: #D69E2E;
+    --error: #E53E3E;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    line-height: 1.6;
+    color: var(--text-dark);
+    background: linear-gradient(135deg, var(--cream) 0%, #FFFFFF 100%);
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Шапка */
+.header {
+    background: var(--wine-primary);
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 20px rgba(114, 47, 55, 0.3);
+}
+
+.header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 20px;
+}
+
+.logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: var(--cream);
+    text-decoration: none;
+}
+
+.nav-list {
+    display: flex;
+    list-style: none;
+    gap: 2rem;
+}
+
+.nav-link {
+    color: var(--cream);
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    padding: 0.5rem 1rem;
+    border-radius: 25px;
+}
+
+.nav-link:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* Кнопка выхода */
+.nav-button {
+    background: var(--gold);
+    color: var(--text-dark) !important;
+    border: 2px solid var(--gold);
+    margin-left: 1rem;
+    font-weight: 600;
+}
+
+.nav-button:hover {
+    background: transparent;
+    color: var(--gold) !important;
+    transform: translateY(-2px);
+}
+
+/* Секция заявки */
+.application-section {
+    padding: 120px 0 80px;
+    min-height: 100vh;
+}
+
+.application-form-container {
+    max-width: 600px;
+    margin: 0 auto;
+    background: white;
+    padding: 3rem;
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(114, 47, 55, 0.1);
+    border: 1px solid rgba(114, 47, 55, 0.1);
+}
+
+.application-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.2rem;
+    color: var(--wine-primary);
+    margin-bottom: 1rem;
+}
+
+.application-subtitle {
+    color: var(--wine-light);
+    font-size: 1.1rem;
+}
+
+/* Стили формы */
+.form-group {
+    margin-bottom: 2rem;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 0.8rem;
+    font-weight: 500;
+    color: var(--wine-primary);
+    font-size: 1.1rem;
+}
+
+.form-input {
+    width: 100%;
+    padding: 14px 16px;
+    border: 2px solid #E5E5E5;
+    border-radius: 10px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background: white;
+    font-family: 'Inter', sans-serif;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: var(--wine-primary);
+    box-shadow: 0 0 0 3px rgba(114, 47, 55, 0.1);
+}
+
+.form-input:invalid:not(:focus):not(:placeholder-shown) {
+    border-color: var(--error);
+}
+
+.form-textarea {
+    width: 100%;
+    padding: 14px 16px;
+    border: 2px solid #E5E5E5;
+    border-radius: 10px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background: white;
+    font-family: 'Inter', sans-serif;
+    resize: vertical;
+    min-height: 100px;
+}
+
+.form-textarea:focus {
+    outline: none;
+    border-color: var(--wine-primary);
+    box-shadow: 0 0 0 3px rgba(114, 47, 55, 0.1);
+}
+
+.form-hint {
+    font-size: 0.85rem;
+    color: var(--wine-light);
+    margin-top: 0.5rem;
+}
+
+.error-message {
+    color: var(--error);
+    font-size: 0.85rem;
+    margin-top: 0.5rem;
+    display: none;
+}
+
+/* Стили для способов оплаты */
+.payment-options {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.payment-option {
+    display: flex;
+    align-items: flex-start;
+    padding: 1.5rem;
+    border: 2px solid #E5E5E5;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.payment-option:hover {
+    border-color: var(--wine-light);
+    background: var(--cream);
+}
+
+.payment-option input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+}
+
+.payment-custom-radio {
+    width: 20px;
+    height: 20px;
+    border: 2px solid #E5E5E5;
+    border-radius: 50%;
+    margin-right: 1rem;
+    margin-top: 0.2rem;
+    position: relative;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+}
+
+.payment-option input[type="radio"]:checked + .payment-custom-radio {
+    border-color: var(--wine-primary);
+    background: var(--wine-primary);
+}
+
+.payment-option input[type="radio"]:checked + .payment-custom-radio::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 8px;
+    height: 8px;
+    background: white;
+    border-radius: 50%;
+}
+
+.payment-option input[type="radio"]:checked ~ .payment-text {
+    color: var(--wine-primary);
+}
+
+.payment-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.payment-text strong {
+    font-size: 1rem;
+    color: var(--text-dark);
+}
+
+.payment-description {
+    font-size: 0.9rem;
+    color: var(--wine-light);
+}
+
+/* Кнопки */
+.button {
+    display: inline-block;
+    padding: 14px 32px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+    text-align: center;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    font-size: 1rem;
+}
+
+.button-primary {
+    background: var(--gold);
+    color: var(--text-dark);
+    border: none;
+}
+
+.button-primary:hover {
+    background: transparent;
+    border-color: var(--gold);
+    color: var(--gold);
+    transform: translateY(-2px);
+}
+
+.button-secondary {
+    background: transparent;
+    color: var(--wine-primary);
+    border: 2px solid var(--wine-primary);
+}
+
+.button-secondary:hover {
+    background: var(--wine-primary);
+    color: white;
+    transform: translateY(-2px);
+}
+
+.form-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: space-between;
+    margin-top: 2rem;
+}
+
+.form-actions .button {
+    flex: 1;
+}
+
+/* Подвал */
+.footer {
+    background: var(--wine-dark);
+    color: var(--cream);
+    text-align: center;
+    padding: 2rem 0;
+    margin-top: 2rem;
+}
+
+/* Уведомления */
+.notification {
+    position: fixed;
+    top: 100px;
+    right: 20px;
+    padding: 1rem 1.5rem;
+    border-radius: 10px;
+    color: white;
+    font-weight: 500;
+    z-index: 1001;
+    animation: slideIn 0.3s ease;
+    max-width: 400px;
+}
+
+.notification.success {
+    background: var(--success);
+}
+
+.notification.error {
+    background: var(--error);
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .application-section {
+        padding: 140px 0 40px;
+    }
+    
+    .application-form-container {
+        margin: 1rem;
+        padding: 2rem;
+    }
+    
+    .section-title {
+        font-size: 1.8rem;
+    }
+    
+    .nav-list {
+        gap: 1rem;
+    }
+    
+    .header .container {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .form-actions {
+        flex-direction: column;
+    }
+    
+    .payment-option {
+        padding: 1rem;
+    }
+}

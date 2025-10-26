@@ -1,0 +1,441 @@
+/* Цветовая палитра в стиле красного вина */
+:root {
+    --wine-primary: #722F37;
+    --wine-dark: #5A2329;
+    --wine-light: #8C4A52;
+    --cream: #F8F4F0;
+    --gold: #D4AF37;
+    --text-dark: #2C1810;
+    --success: #38A169;
+    --warning: #D69E2E;
+    --error: #E53E3E;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    line-height: 1.6;
+    color: var(--text-dark);
+    background: linear-gradient(135deg, var(--cream) 0%, #FFFFFF 100%);
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Шапка */
+.header {
+    background: var(--wine-primary);
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 20px rgba(114, 47, 55, 0.3);
+}
+
+.header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 20px;
+}
+
+.logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: var(--cream);
+    text-decoration: none;
+}
+
+.nav-list {
+    display: flex;
+    list-style: none;
+    gap: 2rem;
+}
+
+.nav-link {
+    color: var(--cream);
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    padding: 0.5rem 1rem;
+    border-radius: 25px;
+}
+
+.nav-link:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* Кнопка выхода */
+.nav-button {
+    background: var(--gold);
+    color: var(--text-dark) !important;
+    border: 2px solid var(--gold);
+    margin-left: 1rem;
+    font-weight: 600;
+}
+
+.nav-button:hover {
+    background: transparent;
+    color: var(--gold) !important;
+    transform: translateY(-2px);
+}
+
+/* Секция заявок */
+.applications-section {
+    padding: 120px 0 80px;
+    min-height: 100vh;
+}
+
+.applications-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem;
+    color: var(--wine-primary);
+    margin-bottom: 1rem;
+}
+
+.applications-subtitle {
+    color: var(--wine-light);
+    font-size: 1.1rem;
+}
+
+/* Список заявок */
+.applications-list {
+    display: grid;
+    gap: 1.5rem;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.application-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(114, 47, 55, 0.1);
+    border: 1px solid rgba(114, 47, 55, 0.1);
+    transition: all 0.3s ease;
+}
+
+.application-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 20px 40px rgba(114, 47, 55, 0.2);
+}
+
+.application-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+}
+
+.application-title {
+    font-size: 1.3rem;
+    color: var(--wine-primary);
+    margin-bottom: 0.5rem;
+}
+
+.application-status {
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.status-pending {
+    background: var(--warning);
+    color: white;
+}
+
+.status-approved {
+    background: var(--success);
+    color: white;
+}
+
+.status-rejected {
+    background: var(--error);
+    color: white;
+}
+
+.status-completed {
+    background: var(--wine-light);
+    color: white;
+}
+
+.application-details {
+    margin-bottom: 1.5rem;
+}
+
+.application-detail {
+    display: flex;
+    margin-bottom: 0.5rem;
+}
+
+.detail-label {
+    font-weight: 500;
+    color: var(--wine-primary);
+    min-width: 120px;
+}
+
+.detail-value {
+    color: var(--text-dark);
+}
+
+/* Кнопки */
+.button {
+    display: inline-block;
+    padding: 10px 20px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+    text-align: center;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.9rem;
+}
+
+.button-primary {
+    background: var(--gold);
+    color: var(--text-dark);
+    border: none;
+}
+
+.button-primary:hover {
+    background: transparent;
+    border-color: var(--gold);
+    color: var(--gold);
+    transform: translateY(-2px);
+}
+
+.button-secondary {
+    background: transparent;
+    color: var(--wine-primary);
+    border: 2px solid var(--wine-primary);
+}
+
+.button-secondary:hover {
+    background: var(--wine-primary);
+    color: white;
+    transform: translateY(-2px);
+}
+
+.button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.button:disabled:hover {
+    background: var(--gold);
+    color: var(--text-dark);
+    border: none;
+}
+
+/* Отзывы */
+.application-review {
+    margin-top: 1rem;
+    padding: 1rem;
+    background: var(--cream);
+    border-radius: 10px;
+    border-left: 4px solid var(--gold);
+}
+
+.review-header {
+    display: flex;
+    justify-content: between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.review-rating {
+    color: var(--gold);
+    font-size: 1.1rem;
+}
+
+.review-text {
+    color: var(--text-dark);
+    line-height: 1.5;
+}
+
+/* Модальное окно */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1001;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);
+}
+
+.modal-content {
+    background-color: white;
+    margin: 5% auto;
+    padding: 0;
+    border-radius: 15px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    animation: modalAppear 0.3s ease;
+}
+
+@keyframes modalAppear {
+    from {
+        opacity: 0;
+        transform: translateY(-50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 2rem;
+    border-bottom: 1px solid #E5E5E5;
+}
+
+.modal-header h3 {
+    font-family: 'Playfair Display', serif;
+    color: var(--wine-primary);
+    margin: 0;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--wine-light);
+    transition: color 0.3s ease;
+}
+
+.modal-close:hover {
+    color: var(--wine-primary);
+}
+
+.review-form {
+    padding: 2rem;
+}
+
+/* Звезды рейтинга */
+.rating-stars {
+    display: flex;
+    gap: 0.5rem;
+    margin: 0.5rem 0;
+}
+
+.star {
+    font-size: 2rem;
+    color: #E5E5E5;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.star:hover,
+.star.active {
+    color: var(--gold);
+}
+
+/* Текстовое поле */
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: var(--wine-primary);
+}
+
+.form-textarea {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid #E5E5E5;
+    border-radius: 10px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background: white;
+    font-family: 'Inter', sans-serif;
+    resize: vertical;
+}
+
+.form-textarea:focus {
+    outline: none;
+    border-color: var(--wine-primary);
+    box-shadow: 0 0 0 3px rgba(114, 47, 55, 0.1);
+}
+
+.form-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+}
+
+/* Подвал */
+.footer {
+    background: var(--wine-dark);
+    color: var(--cream);
+    text-align: center;
+    padding: 2rem 0;
+    margin-top: 2rem;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .applications-section {
+        padding: 140px 0 40px;
+    }
+    
+    .section-title {
+        font-size: 2rem;
+    }
+    
+    .application-header {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .application-status {
+        align-self: flex-start;
+    }
+    
+    .nav-list {
+        gap: 1rem;
+    }
+    
+    .header .container {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .form-actions {
+        flex-direction: column;
+    }
+    
+    .modal-content {
+        margin: 10% auto;
+        width: 95%;
+    }
+}

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вход | Корочки.есть</title>
+    <link rel="stylesheet" href="../css/register.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <a href="../index.html" class="logo">Корочки.есть</a>
+            <nav class="nav">
+                <ul class="nav-list">
+                    <li><a href="../index.html#courses" class="nav-link">Курсы</a></li>
+                    <li><a href="../index.html#about" class="nav-link">О портале</a></li>
+                    <li><a href="register.html" class="nav-link nav-button">Регистрация</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="auth-section">
+            <div class="container">
+                <div class="auth-form-container">
+                    <div class="auth-header">
+                        <h1 class="section-title">Вход в аккаунт</h1>
+                        <p class="auth-subtitle">Войдите в свой аккаунт для доступа к курсам</p>
+                    </div>
+                    
+                    <form class="auth-form" id="loginForm">
+                        <!-- Логин -->
+                        <div class="form-group">
+                            <label for="login" class="form-label">Логин</label>
+                            <input 
+                                type="text" 
+                                id="login" 
+                                name="login" 
+                                class="form-input"
+                                placeholder="Введите ваш логин"
+                                required
+                                minlength="6"
+                                pattern="[A-Za-z0-9]+"
+                            >
+                            <div class="error-message" id="loginError"></div>
+                        </div>
+
+                        <!-- Пароль -->
+                        <div class="form-group">
+                            <label for="password" class="form-label">Пароль</label>
+                            <input 
+                                type="password" 
+                                id="password" 
+                                name="password" 
+                                class="form-input"
+                                placeholder="Введите ваш пароль"
+                                required
+                                minlength="8"
+                            >
+                            <div class="error-message" id="passwordError"></div>
+                        </div>
+
+                        <button type="submit" class="button button-primary auth-button">
+                            Войти в аккаунт
+                        </button>
+
+                        <div class="auth-links">
+                            <p>Еще не зарегистрированы? <a href="register.html" class="auth-link">Регистрация</a></p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 «Корочки.есть». Портал дополнительного образования</p>
+        </div>
+    </footer>
+
+    <script src="../js/login.js"></script>
+</body>
+</html>+

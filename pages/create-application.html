@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Подать заявку | Корочки.есть</title>
+    <link rel="stylesheet" href="../css/create-application.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <a href="../index.html" class="logo">Корочки.есть</a>
+            <nav class="nav">
+                <ul class="nav-list">
+                    <li><a href="../index.html#courses" class="nav-link">Курсы</a></li>
+                    <li><a href="applications.html" class="nav-link">Мои заявки</a></li>
+                    <li><a href="create-application.html" class="nav-link">Подать заявку</a></li>
+                    <li><a href="#" class="nav-link nav-button" id="logoutBtn">Выйти</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="application-section">
+            <div class="container">
+                <div class="application-form-container">
+                    <div class="application-header">
+                        <h1 class="section-title">Подача заявки на обучение</h1>
+                        <p class="application-subtitle">Заполните форму для подачи заявки на выбранный курс</p>
+                    </div>
+                    
+                    <form class="application-form" id="applicationForm">
+                        <!-- Выбор курса -->
+                        <div class="form-group">
+                            <label for="courseName" class="form-label">Наименование курса *</label>
+                            <input 
+                                type="text" 
+                                id="courseName" 
+                                name="courseName" 
+                                class="form-input"
+                                placeholder="Введите название курса"
+                                list="coursesList"
+                                required
+                            >
+                            <datalist id="coursesList">
+                                <option value="Digital-маркетинг">
+                                <option value="Веб-разработка">
+                                <option value="Data Science">
+                                <option value="Графический дизайн">
+                                <option value="Мобильная разработка">
+                            </datalist>
+                            <div class="form-hint">Начните вводить название курса и выберите из списка</div>
+                            <div class="error-message" id="courseNameError"></div>
+                        </div>
+
+                        <!-- Дата начала обучения -->
+                        <div class="form-group">
+                            <label for="startDate" class="form-label">Желаемая дата начала обучения *</label>
+                            <input 
+                                type="date" 
+                                id="startDate" 
+                                name="startDate" 
+                                class="form-input"
+                                required
+                                min=""
+                            >
+                            <div class="form-hint">Выберите дату не ранее чем через 7 дней от текущей</div>
+                            <div class="error-message" id="startDateError"></div>
+                        </div>
+
+                        <!-- Способ оплаты -->
+                        <div class="form-group">
+                            <label class="form-label">Способ оплаты *</label>
+                            <div class="payment-options">
+                                <label class="payment-option">
+                                    <input type="radio" name="paymentMethod" value="cash" required>
+                                    <span class="payment-custom-radio"></span>
+                                    <span class="payment-text">
+                                        <strong>Наличными</strong>
+                                        <span class="payment-description">Оплата в офисе при заключении договора</span>
+                                    </span>
+                                </label>
+                                
+                                <label class="payment-option">
+                                    <input type="radio" name="paymentMethod" value="phone_transfer" required>
+                                    <span class="payment-custom-radio"></span>
+                                    <span class="payment-text">
+                                        <strong>Переводом по номеру телефона</strong>
+                                        <span class="payment-description">Оплата через СБП или мобильный банк</span>
+                                    </span>
+                                </label>
+                            </div>
+                            <div class="error-message" id="paymentMethodError"></div>
+                        </div>
+
+                        <!-- Дополнительная информация -->
+                        <div class="form-group">
+                            <label for="additionalInfo" class="form-label">Дополнительная информация</label>
+                            <textarea 
+                                id="additionalInfo" 
+                                name="additionalInfo" 
+                                class="form-textarea"
+                                placeholder="Укажите дополнительную информацию, пожелания или вопросы..."
+                                rows="4"
+                            ></textarea>
+                            <div class="form-hint">Необязательное поле</div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="button" class="button button-secondary" onclick="goBack()">Назад</button>
+                            <button type="submit" class="button button-primary">
+                                Отправить заявку
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 «Корочки.есть». Портал дополнительного образования</p>
+        </div>
+    </footer>
+
+    <script src="../js/create-application.js"></script>
+</body>
+</html>

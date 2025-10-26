@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мои заявки | Корочки.есть</title>
+    <link rel="stylesheet" href="../css/applications.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <a href="../index.html" class="logo">Корочки.есть</a>
+            <nav class="nav">
+                <ul class="nav-list">
+                    <li><a href="../index.html#courses" class="nav-link">Курсы</a></li>
+                    <li><a href="applications.html" class="nav-link">Мои заявки</a></li>
+                    <li><a href="../index.html#about" class="nav-link">О портале</a></li>
+                    <li><a href="#" class="nav-link nav-button" id="logoutBtn">Выйти</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="applications-section">
+            <div class="container">
+                <div class="applications-header">
+                    <h1 class="section-title">Мои заявки на обучение</h1>
+                    <p class="applications-subtitle">Здесь вы можете просмотреть статус ваших заявок и оставить отзывы о пройденных курсах</p>
+                </div>
+
+                <!-- Список заявок -->
+                <div class="applications-list" id="applicationsList">
+                    <!-- Заявки будут добавляться через JavaScript -->
+                </div>
+
+                <!-- Модальное окно для отзыва -->
+                <div class="modal" id="reviewModal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3>Оставить отзыв о курсе</h3>
+                            <button class="modal-close" id="modalClose">&times;</button>
+                        </div>
+                        <form class="review-form" id="reviewForm">
+                            <input type="hidden" id="reviewCourseId">
+                            <div class="form-group">
+                                <label for="reviewRating" class="form-label">Оценка курса</label>
+                                <div class="rating-stars">
+                                    <span class="star" data-rating="1">★</span>
+                                    <span class="star" data-rating="2">★</span>
+                                    <span class="star" data-rating="3">★</span>
+                                    <span class="star" data-rating="4">★</span>
+                                    <span class="star" data-rating="5">★</span>
+                                </div>
+                                <input type="hidden" id="reviewRating" name="rating" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="reviewText" class="form-label">Текст отзыва</label>
+                                <textarea 
+                                    id="reviewText" 
+                                    name="reviewText" 
+                                    class="form-textarea"
+                                    placeholder="Поделитесь вашими впечатлениями о курсе..."
+                                    rows="5"
+                                    required
+                                ></textarea>
+                            </div>
+                            <div class="form-actions">
+                                <button type="button" class="button button-secondary" id="cancelReview">Отмена</button>
+                                <button type="submit" class="button button-primary">Отправить отзыв</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 «Корочки.есть». Портал дополнительного образования</p>
+        </div>
+    </footer>
+
+    <script src="../js/applications.js"></script>
+</body>
+</html>
