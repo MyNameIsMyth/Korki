@@ -8,6 +8,184 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+    const loginForm = document.getElementById('loginForm');
+    const API_BASE = 'http://localhost:3000/api';
+
+    // Проверяем, авторизован ли пользователь
+
+
+    loginForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        // Сброс ошибок
+        clearErrors();
+        
+        const formData = {
+            login: document.getElementById('login').value.trim(),
+            password: document.getElementById('password').value
+        };
+
+        // Базовая валидация на клиенте
+        if (!formData.login) {
+            showError('login', 'Введите логин');
+            return;
+        }
+
+        if (!formData.password) {
+            showError('password', 'Введите пароль');
+            return;
+        }
+
+        // Показываем индикатор загрузки
+        const submitButton = loginForm.querySelector('button[type="submit"]');
+        const originalText = submitButton.textContent;
+        submitButton.textContent = 'Вход...';
+        submitButton.disabled = true;
+
+        try {
+            const response = await fetch(`${API_BASE}/auth/login`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData)
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                // Сохраняем данные пользователя
+                localStorage.setItem('user', JSON.stringify(data.user));
+                localStorage.setItem('isAuthenticated', 'true');
+                localStorage.setItem('authToken', 'user_' + data.user.id); // Временный токен
+                
+                showSuccess('Вход выполнен успешно!');
+                
+                // Перенаправляем на главную страницу
+                setTimeout(() => {
+                    window.location.href = '../index.html';
+                }, 1000);
+                
+            } else {
+                showError('form', data.error || 'Ошибка входа');
+            }
+        } catch (error) {
+            console.error('Ошибка:', error);
+            showError('form', 'Ошибка соединения с сервером. Проверьте, запущен ли сервер.');
+        } finally {
+            // Восстанавливаем кнопку
+            submitButton.textContent = originalText;
+            submitButton.disabled = false;
+        }
+    });
+
+    function clearErrors() {
+        const errorElements = document.querySelectorAll('.error-message');
+        errorElements.forEach(el => {
+            el.textContent = '';
+            el.style.display = 'none';
+        });
+        
+        // Убираем красную обводку у полей
+        const inputs = document.querySelectorAll('.form-input');
+        inputs.forEach(input => {
+            input.style.borderColor = '';
+        });
+    }
+
+    function showError(field, message) {
+        let errorElement;
+        
+        if (field === 'form') {
+            // Создаем общий элемент для ошибок формы
+            errorElement = document.getElementById('formError');
+            if (!errorElement) {
+                errorElement = document.createElement('div');
+                errorElement.id = 'formError';
+                errorElement.className = 'error-message form-error';
+                loginForm.insertBefore(errorElement, loginForm.querySelector('.auth-links'));
+            }
+        } else {
+            errorElement = document.getElementById(field + 'Error');
+        }
+        
+        if (errorElement) {
+            errorElement.textContent = message;
+            errorElement.style.display = 'block';
+            errorElement.style.color = '#dc2626';
+            errorElement.style.fontSize = '14px';
+            errorElement.style.marginTop = '5px';
+            
+            // Добавляем красную обводку к соответствующему полю
+            if (field !== 'form') {
+                const inputField = document.getElementById(field);
+                if (inputField) {
+                    inputField.style.borderColor = '#dc2626';
+                }
+            }
+        }
+    }
+
+    function showSuccess(message) {
+        // Создаем элемент для успешного сообщения
+        const successElement = document.createElement('div');
+        successElement.className = 'success-message';
+        successElement.textContent = message;
+        successElement.style.cssText = `
+            background-color: #d1fae5;
+            color: #065f46;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 1px solid #a7f3d0;
+            text-align: center;
+            font-weight: 500;
+        `;
+        
+        // Вставляем перед формой
+        const formContainer = document.querySelector('.auth-form-container');
+        const form = document.querySelector('.auth-form');
+        formContainer.insertBefore(successElement, form);
+        
+        // Удаляем сообщение через 3 секунды
+        setTimeout(() => {
+            successElement.remove();
+        }, 3000);
+    }
+
+    function checkAuthStatus() {
+        const isAuthenticated = localStorage.getItem('isAuthenticated');
+        if (isAuthenticated === 'true') {
+            // Если пользователь уже авторизован, перенаправляем на главную
+            window.location.href = '../index.html';
+        }
+    }
+
+    // Добавляем обработчики для сброса ошибок при вводе
+    document.getElementById('login').addEventListener('input', function() {
+        clearFieldError('login');
+    });
+
+    document.getElementById('password').addEventListener('input', function() {
+        clearFieldError('password');
+    });
+
+    function clearFieldError(field) {
+        const errorElement = document.getElementById(field + 'Error');
+        if (errorElement) {
+            errorElement.textContent = '';
+            errorElement.style.display = 'none';
+        }
+        
+        const inputField = document.getElementById(field);
+        if (inputField) {
+            inputField.style.borderColor = '';
+        }
+    }
+});
+     </script>
 </head>
 <body>
     <header class="header">
@@ -85,4 +263,4 @@
 
     <script src="../js/login.js"></script>
 </body>
-</html>+
+</html>

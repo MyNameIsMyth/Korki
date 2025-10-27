@@ -8,6 +8,78 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+    const registerForm = document.getElementById('registerForm');
+    const API_BASE = 'http://localhost:3000/api';
+
+    registerForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        // Сброс ошибок
+        clearErrors();
+        
+        const formData = {
+            login: document.getElementById('login').value,
+            password: document.getElementById('password').value,
+            full_name: document.getElementById('fullname').value,
+            phone: document.getElementById('phone').value,
+            email: document.getElementById('email').value
+        };
+
+        try {
+            const response = await fetch(`${API_BASE}/auth/register`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData)
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                alert('Регистрация успешна! Теперь вы можете войти в систему.');
+                window.location.href = 'login.html';
+            } else {
+                showError('form', data.error || 'Ошибка регистрации');
+            }
+        } catch (error) {
+            console.error('Ошибка:', error);
+            showError('form', 'Ошибка соединения с сервером');
+        }
+    });
+
+    function clearErrors() {
+        const errorElements = document.querySelectorAll('.error-message');
+        errorElements.forEach(el => el.textContent = '');
+    }
+
+    function showError(field, message) {
+        const errorElement = document.getElementById(field + 'Error') || 
+                            document.querySelector('.error-message:last-child');
+        if (errorElement) {
+            errorElement.textContent = message;
+        }
+    }
+
+    // Валидация в реальном времени
+    document.getElementById('phone').addEventListener('input', function(e) {
+        let value = e.target.value.replace(/\D/g, '');
+        if (value.length > 0) {
+            value = value.replace(/^(\d{1})(\d{0,3})(\d{0,3})(\d{0,2})(\d{0,2})/, (match, p1, p2, p3, p4, p5) => {
+                let result = p1;
+                if (p2) result += `(${p2}`;
+                if (p3) result += `)${p3}`;
+                if (p4) result += `-${p4}`;
+                if (p5) result += `-${p5}`;
+                return result;
+            });
+        }
+        e.target.value = value;
+    });
+});
+    </script>
 </head>
 <body>
     <header class="header">

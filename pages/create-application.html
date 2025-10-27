@@ -81,19 +81,19 @@
                             <label class="form-label">Способ оплаты *</label>
                             <div class="payment-options">
                                 <label class="payment-option">
-                                    <input type="radio" name="paymentMethod" value="cash" required>
+                                    <input type="radio" name="paymentMethod" value="bank_transfer" required>
                                     <span class="payment-custom-radio"></span>
                                     <span class="payment-text">
-                                        <strong>Наличными</strong>
-                                        <span class="payment-description">Оплата в офисе при заключении договора</span>
+                                        <strong>Банковский перевод</strong>
+                                        <span class="payment-description">Оплата по реквизитам</span>
                                     </span>
                                 </label>
                                 
                                 <label class="payment-option">
-                                    <input type="radio" name="paymentMethod" value="phone_transfer" required>
+                                    <input type="radio" name="paymentMethod" value="electronic_wallet" required>
                                     <span class="payment-custom-radio"></span>
                                     <span class="payment-text">
-                                        <strong>Переводом по номеру телефона</strong>
+                                        <strong>Электронный кошелек</strong>
                                         <span class="payment-description">Оплата через СБП или мобильный банк</span>
                                     </span>
                                 </label>
@@ -120,7 +120,7 @@
 
                         <div class="form-actions">
                             <button type="button" class="button button-secondary" onclick="goBack()">Назад</button>
-                            <button type="submit" class="button button-primary">
+                            <button type="submit" class="button button-primary" id="submitBtn">
                                 Отправить заявку
                             </button>
                         </div>
@@ -138,4 +138,4 @@
 
     <script src="../js/create-application.js"></script>
 </body>
-</html>
+</html> 

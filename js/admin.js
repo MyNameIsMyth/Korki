@@ -1,51 +1,10 @@
 document.addEventListener('DOMContentLoaded', function() {
     console.log('admin.js загружен');
     
-    // Данные для авторизации
-    const ADMIN_CREDENTIALS = {
-        login: 'Admins',
-        password: 'KorokNET'
-    };
-    
-    // Моковые данные заявок
-    let applications = [
-        {
-            id: 1,
-            userName: 'Иванов Иван Иванович',
-            userEmail: 'ivanov@example.ru',
-            userPhone: '8(999)123-45-67',
-            courseName: 'Digital-маркетинг',
-            startDate: '2024-01-15',
-            paymentMethod: 'bank_card',
-            status: 'new',
-            additionalInfo: 'Хотел бы уточнить расписание занятий',
-            createdAt: '2024-01-10T10:00:00'
-        },
-        {
-            id: 2,
-            userName: 'Петрова Анна Александровна',
-            userEmail: 'petrova@example.ru',
-            userPhone: '8(916)234-56-78',
-            courseName: 'Веб-разработка',
-            startDate: '2024-03-01',
-            paymentMethod: 'electronic_wallet',
-            status: 'in_progress',
-            additionalInfo: '',
-            createdAt: '2024-02-20T14:30:00'
-        },
-        {
-            id: 3,
-            userName: 'Сидоров Сергей Михайлович',
-            userEmail: 'sidorov@example.ru',
-            userPhone: '8(903)345-67-89',
-            courseName: 'Data Science',
-            startDate: '2024-04-20',
-            paymentMethod: 'bank_transfer',
-            status: 'completed',
-            additionalInfo: 'Интересуюсь стажировкой после курса',
-            createdAt: '2024-03-15T09:15:00'
-        }
-    ];
+    // ИСПОЛЬЗУЕМ НОВЫЕ МАРШРУТЫ БЕЗ АВТОРИЗАЦИИ
+    const API_BASE = 'http://localhost:3000/api/simple-admin';
+    let currentAdmin = null;
+    let applications = [];
     
     const loginModal = document.getElementById('loginModal');
     const adminInterface = document.getElementById('adminInterface');
@@ -54,40 +13,25 @@ document.addEventListener('DOMContentLoaded', function() {
     const refreshBtn = document.getElementById('refreshBtn');
     const statusFilter = document.getElementById('statusFilter');
     
+    // ФИКСИРОВАННЫЕ ДАННЫЕ ДЛЯ АДМИНА
+    const ADMIN_CREDENTIALS = {
+        login: 'Admin',
+        password: 'KorokNET'
+    };
+    
     // Проверяем авторизацию
-    const isAdminAuthenticated = localStorage.getItem('adminAuthenticated');
-    if (isAdminAuthenticated === 'true') {
-        showAdminInterface();
-    } else {
-        showLoginModal();
-    }
+    checkAdminAuth();
     
     // Обработчик авторизации
-    adminLoginForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        const login = document.getElementById('adminLogin').value;
-        const password = document.getElementById('adminPassword').value;
-        
-        if (login === ADMIN_CREDENTIALS.login && password === ADMIN_CREDENTIALS.password) {
-            localStorage.setItem('adminAuthenticated', 'true');
-            showAdminInterface();
-            showNotification('Авторизация успешна!', 'success');
-        } else {
-            showNotification('Неверный логин или пароль', 'error');
-        }
-    });
+    adminLoginForm.addEventListener('submit', handleAdminLogin);
     
     // Обработчик выхода
-    logoutBtn.addEventListener('click', function() {
-        localStorage.removeItem('adminAuthenticated');
-        showLoginModal();
-        showNotification('Вы вышли из системы', 'success');
-    });
+    logoutBtn.addEventListener('click', handleLogout);
     
     // Обработчик обновления
     refreshBtn.addEventListener('click', function() {
         loadApplications();
+        loadStats();
         showNotification('Данные обновлены', 'success');
     });
     
@@ -96,123 +40,267 @@ document.addEventListener('DOMContentLoaded', function() {
         loadApplications();
     });
     
+    // Проверка авторизации администратора
+    function checkAdminAuth() {
+        const admin = JSON.parse(localStorage.getItem('admin') || '{}');
+        const isAdminAuthenticated = localStorage.getItem('isAdminAuthenticated');
+        
+        if (isAdminAuthenticated && admin.id) {
+            currentAdmin = admin;
+            showAdminInterface();
+            loadData();
+        } else {
+            showLoginModal();
+        }
+    }
+    
+    // Обработка входа администратора - ТОЛЬКО КЛИЕНТСКАЯ ПРОВЕРКА
+    function handleAdminLogin(e) {
+        e.preventDefault();
+        
+        const login = document.getElementById('adminLogin').value;
+        const password = document.getElementById('adminPassword').value;
+        
+        if (!login || !password) {
+            showNotification('Заполните все поля', 'error');
+            return;
+        }
+        
+        // ПРОВЕРКА ФИКСИРОВАННЫХ ДАННЫХ - БЕЗ ОБРАЩЕНИЯ К СЕРВЕРУ
+        if (login === ADMIN_CREDENTIALS.login && password === ADMIN_CREDENTIALS.password) {
+            // Авторизация успешна
+            const adminData = {
+                id: 1,
+                username: 'Admin',
+                full_name: 'Администратор Системы',
+                email: 'admin@koro4ki-est.ru'
+            };
+            
+            localStorage.setItem('admin', JSON.stringify(adminData));
+            localStorage.setItem('isAdminAuthenticated', 'true');
+            currentAdmin = adminData;
+            
+            showAdminInterface();
+            loadData();
+            showNotification('Авторизация успешна!', 'success');
+        } else {
+            showNotification('Неверный логин или пароль', 'error');
+        }
+    }
+    
+    // Выход из системы
+    function handleLogout() {
+        localStorage.removeItem('admin');
+        localStorage.removeItem('isAdminAuthenticated');
+        currentAdmin = null;
+        showLoginModal();
+        adminLoginForm.reset();
+        showNotification('Вы вышли из системы', 'success');
+    }
+    
     function showLoginModal() {
         loginModal.style.display = 'flex';
         adminInterface.style.display = 'none';
-        adminLoginForm.reset();
     }
     
     function showAdminInterface() {
         loginModal.style.display = 'none';
         adminInterface.style.display = 'block';
+    }
+    
+    // Загрузка всех данных
+    function loadData() {
+        loadStats();
         loadApplications();
     }
     
-    function loadApplications() {
-        const selectedStatus = statusFilter.value;
-        let filteredApplications = applications;
-        
-        if (selectedStatus !== 'all') {
-            filteredApplications = applications.filter(app => app.status === selectedStatus);
+    // Загрузка статистики - БЕЗ ЗАГОЛОВКОВ АВТОРИЗАЦИИ
+    async function loadStats() {
+        try {
+            const response = await fetch(`${API_BASE}/stats`);
+            
+            if (!response.ok) {
+                throw new Error('Ошибка загрузки статистики');
+            }
+            
+            const stats = await response.json();
+            
+            // Обновляем статистику на странице
+            document.getElementById('totalApplications').textContent = stats.total || 0;
+            document.getElementById('newApplications').textContent = stats.pending || 0;
+            document.getElementById('inProgressApplications').textContent = stats.approved || 0;
+            document.getElementById('completedApplications').textContent = stats.completed || 0;
+            document.getElementById('rejectedApplications').textContent = stats.rejected || 0;
+            
+        } catch (error) {
+            console.error('Ошибка загрузки статистики:', error);
+            showNotification('Ошибка загрузки статистики', 'error');
         }
-        
-        renderApplications(filteredApplications);
-        updateStats();
     }
     
-    function renderApplications(applicationsList) {
-        const applicationsListElement = document.getElementById('applicationsList');
+    // Загрузка заявок - БЕЗ ЗАГОЛОВКОВ АВТОРИЗАЦИИ
+    async function loadApplications() {
+        try {
+            const statusFilterValue = statusFilter.value;
+            let url = `${API_BASE}/applications`;
+            
+            // Преобразуем статусы для бэкенда
+            const statusMap = {
+                'new': 'pending',
+                'in_progress': 'approved',
+                'completed': 'completed',
+                'rejected': 'rejected'
+            };
+            
+            if (statusFilterValue && statusFilterValue !== 'all') {
+                const backendStatus = statusMap[statusFilterValue] || statusFilterValue;
+                url += `?status=${backendStatus}`;
+            }
+            
+            const response = await fetch(url);
+            
+            if (!response.ok) {
+                throw new Error('Ошибка загрузки заявок');
+            }
+            
+            applications = await response.json();
+            renderApplicationsTable(applications);
+            
+        } catch (error) {
+            console.error('Ошибка загрузки заявок:', error);
+            showNotification('Ошибка загрузки заявок', 'error');
+        }
+    }
+    
+    // Отрисовка таблицы заявок
+    function renderApplicationsTable(applicationsList) {
+        const tbody = document.getElementById('applicationsTableBody');
+        const emptyState = document.getElementById('emptyState');
+        
+        tbody.innerHTML = '';
         
         if (applicationsList.length === 0) {
-            applicationsListElement.innerHTML = `
-                <div class="application-card" style="text-align: center; padding: 3rem;">
-                    <h3 style="color: var(--wine-light); margin-bottom: 1rem;">Заявки не найдены</h3>
-                    <p style="color: var(--wine-light);">Нет заявок, соответствующих выбранному фильтру</p>
-                </div>
-            `;
+            emptyState.style.display = 'block';
             return;
         }
         
-        applicationsListElement.innerHTML = applicationsList.map(app => `
-            <div class="application-card" data-application-id="${app.id}">
-                <div class="application-header">
-                    <div>
-                        <h3 class="application-title">${app.courseName}</h3>
-                        <div class="application-user">
-                            ${app.userName} • ${app.userEmail} • ${app.userPhone}
-                        </div>
-                    </div>
-                    <span class="application-status status-${app.status}">
-                        ${getStatusText(app.status)}
-                    </span>
-                </div>
-                
-                <div class="application-details">
-                    <div class="application-detail">
-                        <span class="detail-label">Дата начала</span>
-                        <span class="detail-value">${formatDate(app.startDate)}</span>
-                    </div>
-                    <div class="application-detail">
-                        <span class="detail-label">Способ оплаты</span>
-                        <span class="detail-value">${getPaymentMethodText(app.paymentMethod)}</span>
-                    </div>
-                    <div class="application-detail">
-                        <span class="detail-label">Дата подачи</span>
-                        <span class="detail-value">${formatDateTime(app.createdAt)}</span>
-                    </div>
-                </div>
-                
-                ${app.additionalInfo ? `
-                    <div class="application-detail">
-                        <span class="detail-label">Дополнительная информация</span>
-                        <span class="detail-value">${app.additionalInfo}</span>
-                    </div>
-                ` : ''}
-                
-                <div class="application-actions">
-                    <div class="status-buttons">
-                        ${app.status !== 'in_progress' ? `
-                            <button class="status-btn btn-in-progress" onclick="changeApplicationStatus(${app.id}, 'in_progress')">
-                                Идет обучение
-                            </button>
-                        ` : ''}
-                        
-                        ${app.status !== 'completed' ? `
-                            <button class="status-btn btn-completed" onclick="changeApplicationStatus(${app.id}, 'completed')">
-                                Обучение завершено
-                            </button>
-                        ` : ''}
-                    </div>
-                </div>
-            </div>
-        `).join('');
-    }
-    
-    function updateStats() {
-        const total = applications.length;
-        const newApps = applications.filter(app => app.status === 'new').length;
-        const inProgress = applications.filter(app => app.status === 'in_progress').length;
-        const completed = applications.filter(app => app.status === 'completed').length;
+        emptyState.style.display = 'none';
         
-        document.getElementById('totalApplications').textContent = total;
-        document.getElementById('newApplications').textContent = newApps;
-        document.getElementById('inProgressApplications').textContent = inProgress;
-        document.getElementById('completedApplications').textContent = completed;
+        applicationsList.forEach(app => {
+            const row = document.createElement('tr');
+            
+            // Преобразуем статусы для фронтенда
+            const statusMap = {
+                'pending': { text: 'Новая', class: 'new' },
+                'approved': { text: 'Идет обучение', class: 'in_progress' },
+                'completed': { text: 'Обучение завершено', class: 'completed' },
+                'rejected': { text: 'Отклонена', class: 'rejected' }
+            };
+            
+            const statusInfo = statusMap[app.status] || { text: app.status, class: app.status };
+            
+            row.innerHTML = `
+                <td>${app.id}</td>
+                <td>
+                    <strong>${app.student_name}</strong><br>
+                    <small>${app.student_email}</small><br>
+                    <small>${app.student_phone}</small>
+                </td>
+                <td>
+                    <strong>${app.course_name}</strong><br>
+                    <small>${app.duration_months} мес.</small>
+                </td>
+                <td>${formatDate(app.desired_start_date)}</td>
+                <td>${getPaymentMethodText(app.payment_method)}</td>
+                <td>${formatDateTime(app.created_at)}</td>
+                <td>
+                    <span class="status-badge status-${statusInfo.class}">
+                        ${statusInfo.text}
+                    </span>
+                </td>
+                <td>
+                    <div class="action-buttons">
+                        <select class="status-select" data-application-id="${app.id}">
+                            <option value="pending" ${app.status === 'pending' ? 'selected' : ''}>Новая</option>
+                            <option value="approved" ${app.status === 'approved' ? 'selected' : ''}>Идет обучение</option>
+                            <option value="completed" ${app.status === 'completed' ? 'selected' : ''}>Обучение завершено</option>
+                            <option value="rejected" ${app.status === 'rejected' ? 'selected' : ''}>Отклонена</option>
+                        </select>
+                        <button class="button button-small button-danger" onclick="deleteApplication(${app.id})">
+                            Удалить
+                        </button>
+                    </div>
+                </td>
+            `;
+            
+            // Добавляем обработчик изменения статуса
+            const statusSelect = row.querySelector('.status-select');
+            statusSelect.addEventListener('change', function() {
+                updateApplicationStatus(app.id, this.value);
+            });
+            
+            tbody.appendChild(row);
+        });
     }
     
-    function getStatusText(status) {
-        const statusMap = {
-            'new': 'Новая',
-            'in_progress': 'Идет обучение',
-            'completed': 'Обучение завершено'
-        };
-        return statusMap[status] || status;
+    // Обновление статуса заявки - БЕЗ ЗАГОЛОВКОВ АВТОРИЗАЦИИ
+    async function updateApplicationStatus(applicationId, newStatus) {
+        try {
+            const response = await fetch(`${API_BASE}/applications/${applicationId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ 
+                    status: newStatus,
+                    admin_notes: `Статус изменен администратором`
+                })
+            });
+            
+            const data = await response.json();
+            
+            if (response.ok) {
+                showNotification('Статус заявки обновлен', 'success');
+                loadApplications();
+                loadStats(); // Обновляем статистику
+            } else {
+                showNotification(data.error || 'Ошибка обновления статуса', 'error');
+            }
+        } catch (error) {
+            console.error('Ошибка обновления статуса:', error);
+            showNotification('Ошибка обновления статуса', 'error');
+        }
     }
     
+    // Удаление заявки - БЕЗ ЗАГОЛОВКОВ АВТОРИЗАЦИИ
+    async function deleteApplication(applicationId) {
+        if (!confirm('Вы уверены, что хотите удалить эту заявку?')) {
+            return;
+        }
+        
+        try {
+            const response = await fetch(`${API_BASE}/applications/${applicationId}`, {
+                method: 'DELETE'
+            });
+            
+            const data = await response.json();
+            
+            if (response.ok) {
+                showNotification('Заявка удалена', 'success');
+                loadApplications();
+                loadStats(); // Обновляем статистику
+            } else {
+                showNotification(data.error || 'Ошибка удаления заявки', 'error');
+            }
+        } catch (error) {
+            console.error('Ошибка удаления заявки:', error);
+            showNotification('Ошибка удаления заявки', 'error');
+        }
+    }
+    
+    // Вспомогательные функции
     function getPaymentMethodText(method) {
         const methodMap = {
-            'cash': 'Наличными',
-            'phone_transfer': 'Перевод по телефону',
             'bank_card': 'Банковская карта',
             'electronic_wallet': 'Электронный кошелек',
             'bank_transfer': 'Банковский перевод'
@@ -242,6 +330,28 @@ document.addEventListener('DOMContentLoaded', function() {
         notification.className = `notification ${type}`;
         notification.textContent = message;
         
+        // Стили для уведомлений
+        notification.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 12px 20px;
+            border-radius: 8px;
+            color: white;
+            font-weight: 500;
+            z-index: 10000;
+            max-width: 300px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        `;
+        
+        if (type === 'success') {
+            notification.style.background = '#10b981';
+        } else if (type === 'error') {
+            notification.style.background = '#ef4444';
+        } else {
+            notification.style.background = '#6b7280';
+        }
+        
         document.body.appendChild(notification);
         
         // Автоматически удаляем через 3 секунды
@@ -252,19 +362,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 3000);
     }
     
-    // Глобальная функция для изменения статуса
-    window.changeApplicationStatus = function(applicationId, newStatus) {
-        const applicationIndex = applications.findIndex(app => app.id === applicationId);
-        
-        if (applicationIndex !== -1) {
-            applications[applicationIndex].status = newStatus;
-            loadApplications();
-            
-            const statusText = getStatusText(newStatus);
-            showNotification(`Статус заявки изменен на "${statusText}"`, 'success');
-            
-            // В реальном проекте здесь был бы fetch на сервер
-            console.log(`Статус заявки ${applicationId} изменен на: ${newStatus}`);
-        }
-    };
+    // Глобальные функции
+    window.deleteApplication = deleteApplication;
 });

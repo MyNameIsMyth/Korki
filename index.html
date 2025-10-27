@@ -17,8 +17,9 @@
                 <ul class="nav-list">
                     <li><a href="#courses" class="nav-link">Курсы</a></li>
                     <li><a href="#about" class="nav-link">О портале</a></li>
-                    <li><a href="pages/login.html" class="nav-link">Вход</a></li>
-                    <li><a href="pages/register.html" class="nav-link nav-button">Регистрация</a></li>
+                    <li id="loginItem"><a href="pages/login.html" class="nav-link">Вход</a></li>
+                    <li id="registerItem"><a href="pages/register.html" class="nav-link nav-button">Регистрация</a></li>
+                    <li id="logoutItem" style="display: none;"><a href="#" class="nav-link" onclick="logout()">Выйти</a></li>
                     <li><a href="pages/admin.html" class="nav-link" style="color: var(--gold);">Админ-панель</a></li>
                 </ul>
             </nav>
@@ -40,7 +41,7 @@
                             <h1 class="slide-title">Получите диплом дополнительного образования онлайн</h1>
                             <p class="slide-text">Портал «Корочки.есть» - ваш путь к новым знаниям и официальному подтверждению квалификации</p>
                             <div class="slide-buttons">
-                                <a href="pages/register.html" class="button button-primary">Начать обучение</a>
+                                <a href="pages/create-application.html" class="button button-primary">Начать обучение</a>
                                 <a href="#courses" class="button button-secondary">Выбрать курс</a>
                             </div>
                         </div>
@@ -56,7 +57,7 @@
                             <h1 class="slide-title">Современные образовательные технологии</h1>
                             <p class="slide-text">Интерактивные курсы, практические задания и поддержка преподавателей 24/7</p>
                             <div class="slide-buttons">
-                                <a href="pages/register.html" class="button button-primary">Присоединиться</a>
+                                <a href="pages/create-application.html" class="button button-primary">Присоединиться</a>
                                 <a href="#about" class="button button-secondary">Узнать больше</a>
                             </div>
                         </div>
@@ -72,7 +73,7 @@
                             <h1 class="slide-title">Карьерный рост начинается здесь</h1>
                             <p class="slide-text">Получите востребованную профессию и станьте специалистом в выбранной области</p>
                             <div class="slide-buttons">
-                                <a href="pages/register.html" class="button button-primary">Начать карьеру</a>
+                                <a href="pages/create-application.html" class="button button-primary">Начать карьеру</a>
                                 <a href="#courses" class="button button-secondary">Смотреть курсы</a>
                             </div>
                         </div>
@@ -142,36 +143,24 @@
         const user = JSON.parse(localStorage.getItem('user') || '{}');
         
         if (isAuthenticated && user.id) {
-            updateNavigation(user);
+            updateNavigation();
         }
     });
 
-    function updateNavigation(user) {
-        const nav = document.querySelector('.nav-list');
-        if (nav) {
-            // Убираем кнопки входа и регистрации
-            const loginBtn = nav.querySelector('a[href="pages/login.html"]');
-            const registerBtn = nav.querySelector('a[href="pages/register.html"]');
-            
-            if (loginBtn) loginBtn.remove();
-            if (registerBtn) registerBtn.remove();
-            
-            // Добавляем информацию о пользователе
-            const userInfo = document.createElement('li');
-            userInfo.innerHTML = `
-                <div style="display: flex; align-items: center; gap: 1rem;">
-                    <span style="color: var(--cream);">${user.full_name}</span>
-                    <a href="pages/applications.html" class="nav-link">Мои заявки</a>
-                    <a href="#" onclick="logout()" class="nav-link nav-button">Выйти</a>
-                </div>
-            `;
-            nav.appendChild(userInfo);
-        }
+    function updateNavigation() {
+        const loginItem = document.getElementById('loginItem');
+        const registerItem = document.getElementById('registerItem');
+        const logoutItem = document.getElementById('logoutItem');
+        
+        if (loginItem) loginItem.style.display = 'none';
+        if (registerItem) registerItem.style.display = 'none';
+        if (logoutItem) logoutItem.style.display = 'block';
     }
 
     function logout() {
         localStorage.removeItem('user');
         localStorage.removeItem('isAuthenticated');
+        localStorage.removeItem('authToken');
         window.location.reload();
     }
     </script>

@@ -1,10 +1,24 @@
 const db = require('../config/database');
 
 const applicationController = {
+    // Получение списка курсов
+    getCourses: async (req, res) => {
+        try {
+            const [courses] = await db.execute(
+                'SELECT id, name, description, duration_months, price FROM courses WHERE is_active = 1'
+            );
+
+            res.json(courses);
+        } catch (error) {
+            console.error('Ошибка получения курсов:', error);
+            res.status(500).json({ error: 'Внутренняя ошибка сервера' });
+        }
+    },
+
     // Получение заявок пользователя
     getUserApplications: async (req, res) => {
         try {
-            const userId = req.user.id; // Из middleware
+            const userId = req.user.id;
 
             const [applications] = await db.execute(
                 `SELECT 
@@ -27,7 +41,6 @@ const applicationController = {
                 [userId]
             );
 
-            // Форматирование данных для фронтенда
             const formattedApplications = applications.map(app => ({
                 id: app.id,
                 courseName: app.course_name,
