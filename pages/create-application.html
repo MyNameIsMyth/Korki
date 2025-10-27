@@ -68,7 +68,11 @@
                                 required
                                 min=""
                             >
-                            <div class="form-hint">Выберите дату не ранее чем через 7 дней от текущей</div>
+                            <div class="date-info">
+                                <span class="today-date" id="todayDate"></span>
+                                <span class="min-date" id="minDateInfo"></span>
+                            </div>
+                            <div class="form-hint">Выберите дату не ранее сегодняшнего дня</div>
                             <div class="error-message" id="startDateError"></div>
                         </div>
 
@@ -106,7 +110,11 @@
                                 class="form-textarea"
                                 placeholder="Укажите дополнительную информацию, пожелания или вопросы..."
                                 rows="4"
+                                maxlength="500"
                             ></textarea>
+                            <div class="char-counter">
+                                <span id="charCount">0</span>/500 символов
+                            </div>
                             <div class="form-hint">Необязательное поле</div>
                         </div>
 

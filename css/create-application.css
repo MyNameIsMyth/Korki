@@ -316,7 +316,103 @@ body {
 .form-actions .button {
     flex: 1;
 }
+/* Стили для информации о дате */
+.date-info {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 0.5rem;
+    font-size: 0.85rem;
+}
 
+.today-date {
+    color: var(--wine-primary);
+    font-weight: 500;
+}
+
+.min-date {
+    color: var(--wine-light);
+}
+
+/* Счетчик символов */
+.char-counter {
+    text-align: right;
+    font-size: 0.8rem;
+    color: var(--wine-light);
+    margin-top: 0.5rem;
+}
+
+.char-counter.warning {
+    color: var(--warning);
+}
+
+.char-counter.error {
+    color: var(--error);
+}
+
+/* Стили для валидных/невалидных полей */
+.form-input:valid {
+    border-color: var(--success);
+}
+
+.form-input:invalid:not(:focus):not(:placeholder-shown) {
+    border-color: var(--error);
+}
+
+.form-input:focus:valid {
+    border-color: var(--success);
+    box-shadow: 0 0 0 3px rgba(56, 161, 105, 0.1);
+}
+
+.form-input:focus:invalid {
+    border-color: var(--error);
+    box-shadow: 0 0 0 3px rgba(229, 62, 62, 0.1);
+}
+
+/* Стили для выбранного способа оплаты */
+.payment-option input[type="radio"]:checked ~ .payment-text {
+    color: var(--wine-primary);
+}
+
+.payment-option input[type="radio"]:checked + .payment-custom-radio {
+    border-color: var(--wine-primary);
+    background: var(--wine-primary);
+}
+
+/* Анимация для ошибок */
+.error-message {
+    animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Подсветка обязательных полей */
+.form-label:after {
+    content: " *";
+    color: var(--error);
+}
+
+/* Стили для состояния загрузки */
+.button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.button:disabled:hover {
+    background: var(--gold);
+    color: var(--text-dark);
+    border: none;
+    transform: none;
+}
 /* Подвал */
 .footer {
     background: var(--wine-dark);

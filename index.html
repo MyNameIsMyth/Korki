@@ -14,37 +14,85 @@
         <div class="container">
             <a href="index.html" class="logo">Корочки.есть</a>
             <nav class="nav">
-    <ul class="nav-list">
-        <li><a href="#courses" class="nav-link">Курсы</a></li>
-        <li><a href="#about" class="nav-link">О портале</a></li>
-        <li><a href="pages/login.html" class="nav-link">Вход</a></li>
-        <li><a href="pages/register.html" class="nav-link nav-button">Регистрация</a></li>
-    </ul>
-</nav>
+                <ul class="nav-list">
+                    <li><a href="#courses" class="nav-link">Курсы</a></li>
+                    <li><a href="#about" class="nav-link">О портале</a></li>
+                    <li><a href="pages/login.html" class="nav-link">Вход</a></li>
+                    <li><a href="pages/register.html" class="nav-link nav-button">Регистрация</a></li>
+                    <li><a href="pages/admin.html" class="nav-link" style="color: var(--gold);">Админ-панель</a></li>
+                </ul>
+            </nav>
         </div>
     </header>
 
     <main>
-        <section class="hero">
-            <div class="container">
-                <div class="hero-content">
-                    <h1 class="hero-title">Получите диплом дополнительного образования онлайн</h1>
-                    <p class="hero-text">Портал «Корочки.есть» - ваш путь к новым знаниям и официальному подтверждению квалификации</p>
-                    <div class="hero-buttons">
-                        <a href="pages/register.html" class="button button-primary">Начать обучение</a>
-                        <a href="#courses" class="button button-secondary">Выбрать курс</a>
+        <!-- Слайдер -->
+        <section class="slider-section">
+            <div class="slider-container">
+                <div class="slider">
+                    <!-- Слайд 1 -->
+                    <div class="slide active">
+                        <div class="slide-image">
+                            <img src="images/slide1.jpg" alt="Образование - ключ к успеху" loading="lazy">
+                        </div>
+                        <div class="slide-overlay"></div>
+                        <div class="slide-content">
+                            <h1 class="slide-title">Получите диплом дополнительного образования онлайн</h1>
+                            <p class="slide-text">Портал «Корочки.есть» - ваш путь к новым знаниям и официальному подтверждению квалификации</p>
+                            <div class="slide-buttons">
+                                <a href="pages/register.html" class="button button-primary">Начать обучение</a>
+                                <a href="#courses" class="button button-secondary">Выбрать курс</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Слайд 2 -->
+                    <div class="slide">
+                        <div class="slide-image">
+                            <img src="images/slide2.jpg" alt="Современные технологии обучения" loading="lazy">
+                        </div>
+                        <div class="slide-overlay"></div>
+                        <div class="slide-content">
+                            <h1 class="slide-title">Современные образовательные технологии</h1>
+                            <p class="slide-text">Интерактивные курсы, практические задания и поддержка преподавателей 24/7</p>
+                            <div class="slide-buttons">
+                                <a href="pages/register.html" class="button button-primary">Присоединиться</a>
+                                <a href="#about" class="button button-secondary">Узнать больше</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Слайд 3 -->
+                    <div class="slide">
+                        <div class="slide-image">
+                            <img src="images/slide3.jpg" alt="Карьерный рост с нами" loading="lazy">
+                        </div>
+                        <div class="slide-overlay"></div>
+                        <div class="slide-content">
+                            <h1 class="slide-title">Карьерный рост начинается здесь</h1>
+                            <p class="slide-text">Получите востребованную профессию и станьте специалистом в выбранной области</p>
+                            <div class="slide-buttons">
+                                <a href="pages/register.html" class="button button-primary">Начать карьеру</a>
+                                <a href="#courses" class="button button-secondary">Смотреть курсы</a>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="hero-image">
-                    <div class="diploma-icon">
-                        <span>🎓</span>
+
+                <!-- Навигация слайдера -->
+                <div class="slider-nav">
+                    <button class="slider-prev" aria-label="Предыдущий слайд">‹</button>
+                    <div class="slider-dots">
+                        <button class="dot active" data-slide="0" aria-label="Перейти к слайду 1"></button>
+                        <button class="dot" data-slide="1" aria-label="Перейти к слайду 2"></button>
+                        <button class="dot" data-slide="2" aria-label="Перейти к слайду 3"></button>
                     </div>
+                    <button class="slider-next" aria-label="Следующий слайд">›</button>
                 </div>
             </div>
         </section>
 
         <!-- остальной код без изменений -->
-
         <section id="courses" class="courses">
             <div class="container">
                 <h2 class="section-title">Популярные курсы</h2>
@@ -83,5 +131,49 @@
             <p>&copy; 2025 «Корочки.есть». Онлайн портал дополнительного образования</p>
         </div>
     </footer>
+
+    <!-- Подключаем скрипт слайдера -->
+    <script src="js/slider.js"></script>
+    
+    <!-- Скрипт для проверки авторизации -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const isAuthenticated = localStorage.getItem('isAuthenticated');
+        const user = JSON.parse(localStorage.getItem('user') || '{}');
+        
+        if (isAuthenticated && user.id) {
+            updateNavigation(user);
+        }
+    });
+
+    function updateNavigation(user) {
+        const nav = document.querySelector('.nav-list');
+        if (nav) {
+            // Убираем кнопки входа и регистрации
+            const loginBtn = nav.querySelector('a[href="pages/login.html"]');
+            const registerBtn = nav.querySelector('a[href="pages/register.html"]');
+            
+            if (loginBtn) loginBtn.remove();
+            if (registerBtn) registerBtn.remove();
+            
+            // Добавляем информацию о пользователе
+            const userInfo = document.createElement('li');
+            userInfo.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <span style="color: var(--cream);">${user.full_name}</span>
+                    <a href="pages/applications.html" class="nav-link">Мои заявки</a>
+                    <a href="#" onclick="logout()" class="nav-link nav-button">Выйти</a>
+                </div>
+            `;
+            nav.appendChild(userInfo);
+        }
+    }
+
+    function logout() {
+        localStorage.removeItem('user');
+        localStorage.removeItem('isAuthenticated');
+        window.location.reload();
+    }
+    </script>
 </body>
 </html>

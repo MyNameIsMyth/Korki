@@ -78,31 +78,62 @@
                         </div>
                         <div class="stat-card">
                             <div class="stat-number" id="inProgressApplications">0</div>
-                            <div class="stat-label">В процессе</div>
+                            <div class="stat-label">Идёт обучение</div>
                         </div>
                         <div class="stat-card">
                             <div class="stat-number" id="completedApplications">0</div>
-                            <div class="stat-label">Завершены</div>
+                            <div class="stat-label">Обучение завершено</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="rejectedApplications">0</div>
+                            <div class="stat-label">Отклонено</div>
                         </div>
                     </div>
                 </section>
 
                 <section class="applications-section">
                     <div class="section-header">
-                        <h2>Заявки на обучение</h2>
+                        <h2>Управление заявками</h2>
                         <div class="filters">
                             <select id="statusFilter" class="filter-select">
                                 <option value="all">Все статусы</option>
                                 <option value="new">Новые</option>
-                                <option value="in_progress">Идет обучение</option>
+                                <option value="in_progress">Идёт обучение</option>
                                 <option value="completed">Обучение завершено</option>
+                                <option value="rejected">Отклонено</option>
                             </select>
-                            <button class="button button-secondary" id="refreshBtn">Обновить</button>
+                            <button class="button button-secondary" id="refreshBtn">
+                                Обновить
+                            </button>
                         </div>
                     </div>
 
-                    <div class="applications-list" id="applicationsList">
-                        <!-- Заявки будут загружаться здесь -->
+                    <!-- Таблица заявок -->
+                    <div class="applications-table-container">
+                        <table class="applications-table" id="applicationsTable">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Студент</th>
+                                    <th>Курс</th>
+                                    <th>Дата начала</th>
+                                    <th>Способ оплаты</th>
+                                    <th>Дата подачи</th>
+                                    <th>Статус</th>
+                                    <th>Действия</th>
+                                </tr>
+                            </thead>
+                            <tbody id="applicationsTableBody">
+                                <!-- Заявки будут загружаться здесь -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Состояние пустой таблицы -->
+                    <div class="empty-state" id="emptyState" style="display: none;">
+                        <div class="empty-state-icon">📋</div>
+                        <h3>Заявки не найдены</h3>
+                        <p>Нет заявок, соответствующих выбранному фильтру</p>
                     </div>
                 </section>
             </div>
